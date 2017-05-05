@@ -27,7 +27,6 @@ function(FindLibraryIntoProperties fileName result)
         return()
     endif()
 
-
     if (WINDOWS)
         # TODO: Make it for all possible compilers (Cygwin, MINGW)
         # windows has just one available extension
@@ -54,11 +53,12 @@ endfunction()
 # DefineVariable add to CMAKE_CXX_FLAGS as define and add into cmake as variable
 #  for a second case LibFileName must be present in LIBRARY_DIRECTORIES.
 macro(DefineForFiles ListOfAtoms) 
-    foreach(atom in ${${ListOfAtoms}})
-        string(REPLACE "|" ";" elements ${atom})
-        list(LENGTH elements len)
-        
 
+
+    foreach(atom ${${ListOfAtoms}})
+        string(REPLACE "|" ";" elements ${atom})
+
+        list(LENGTH elements len)
         if (${len} EQUAL 2)
             list(GET elements 0 IncludeFileName)
             list(GET elements 1 DefineVariableName)
@@ -67,7 +67,7 @@ macro(DefineForFiles ListOfAtoms)
             list(GET elements 1 LibraryFileName)
             list(GET elements 2 DefineVariableName)
         else()
-            message(FATAL "  Include/Library atom must be contains 2 or 3 elements.")
+            message(FATAL "  Include/Library atom must be contains 2 or 3 elements. (${elements})")
         endif()
 
         FindFileIntoProperties(IncludeFileName "INCLUDE_DIRECTORIES" HaveInclude)
@@ -77,6 +77,7 @@ macro(DefineForFiles ListOfAtoms)
         if ((${HaveInclude} EQUAL 1) AND (${HaveLibrary} EQUAL 1) )
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${DefineVariableName}")
             set(${DefineVariableName} 1)
+            message(STATUS "Define variable and preprocessor definissions ${DefineVariableName}")
         endif()
                 
     endforeach()

@@ -1,8 +1,10 @@
 
+cmake_policy(SET CMP0052 NEW)
 include(cmake/DefineForFiles.cmake)
 
 list(APPEND UtilsLibraries "rapidjson|RAPIDJSON")
 list(APPEND UtilsLibraries "lua.h|LUA")
+list(APPEND UtilsLibraries "blockingconcurrentqueue.h|ATOMIC_QUEUE")
 
 DefineForFiles(UtilsLibraries)
 
@@ -49,4 +51,3 @@ add_library(utils
             ${RAPIDJSON_GENERATOR}
             ${LUA_CODE}
 )
-
