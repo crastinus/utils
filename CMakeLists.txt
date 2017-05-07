@@ -8,6 +8,28 @@ list(APPEND UtilsLibraries "blockingconcurrentqueue.h|ATOMIC_QUEUE")
 
 DefineForFiles(UtilsLibraries)
 
+set(FILESYSTEM_SRC filesystem/filesystem.hpp filesystem/extra.hpp)
+set(PROCESS_SRC 
+    process/cli_arguments.hpp 
+    process/cli_arguments.cpp 
+    process/process.hpp
+    process/process.cpp
+    )
+
+
+include_directories(. ..)
+
+if (UNIX) 
+    set(FILESYSTEM_SRC ${FILESYSTEM_SRC}
+        filesystem/platform/linux/filesystem.cpp
+        filesystem/extra.cpp
+        )
+    set(PROCESS_SRC ${PROCESS_SRC}
+        process/platform/linux/process.hpp
+        process/platform/linux/process.cpp
+    )
+endif(UNIX)
+
 if (RAPIDJSON)
     message(STATUS "Use Rapidjson")
     set(RAPIDJSON_GENERATOR
@@ -47,6 +69,8 @@ set(STRING_SRC
 add_library(utils 
             iostream/datetime.hpp
             iostream/datetime.cpp 
+            ${PROCESS_SRC}
+            ${FILESYSTEM_SRC}            
             ${STRING_SRC}
             ${RAPIDJSON_GENERATOR}
             ${LUA_CODE}
