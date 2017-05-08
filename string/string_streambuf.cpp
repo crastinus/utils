@@ -13,7 +13,7 @@ std::streamsize string_streambuf::xsputn(char const* s, std::streamsize n) {
 }
 
 string_streambuf::int_type string_streambuf::overflow(int_type ch) {
-    assert(false);  // fires never
+    buffer_.push_back(ch);
     return ch;
 }
 
