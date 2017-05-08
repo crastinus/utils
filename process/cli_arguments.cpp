@@ -27,7 +27,7 @@ void cli_arguments::init(int size) {
 
 cli_arguments::~cli_arguments() {}
 
-std::string cli_arguments::generate() const {
+std::string cli_arguments::to_string() const {
     std::string result;
     result.resize(buffer_.size());
 
@@ -78,26 +78,6 @@ std::vector<char*> cli_arguments::argv()  {
 std::vector<char const*> cli_arguments::argv() const {
     return argv_impl<char const*>(args_, buffer_);
 }
-
-// void cli_arguments::rebase() {
-//    if (buffer_.data() == argv_base_)
-//        return;
-//
-//    auto diff = argv_base_ - buffer_.data();
-//    auto it   = args_.begin();
-//    while (*it) { // array is null terminated
-//        *it += diff;
-//        ++it;
-//    }
-//    argv_base_ = buffer_.data();
-//}
-
-// void cli_arguments::reserve(unsigned size) {
-//    //if (buffer_.size() + size > buffer_.capacity() + 1) {
-//    //    buffer_.reserve((buffer_.size() + size) * 2);
-//    //    rebase();
-//    //}
-//}
 
 cli_arguments::iterator cli_arguments::begin() const { return cli_arguments::iterator(*this, 0); }
 cli_arguments::iterator cli_arguments::end() const {

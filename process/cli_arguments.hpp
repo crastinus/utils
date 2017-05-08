@@ -39,7 +39,7 @@ struct cli_arguments {
     std::vector<char*> argv();
     std::vector<char const*> argv() const;
 
-    std::string generate() const;
+    std::string to_string() const;
 
     iterator begin() const;
     iterator end() const;
@@ -47,12 +47,6 @@ struct cli_arguments {
   private:
     
     void init(int size);
-
-    // rebase args if needed
-    void rebase();
-    void reserve(unsigned size);
-
-    void write_null_symbol();
 
     void add_single_argument(char const* argument);
 
