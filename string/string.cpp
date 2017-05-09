@@ -60,5 +60,24 @@ std::string join(std::vector<std::string> const& arr,
 
     return result;
 }
+
+void trim_right(std::string& str) {
+    while(std::isspace(str.back()))
+        str.pop_back();
+}
+
+std::string trim_right_im(std::string const& str) {
+    auto begin = str.begin();
+    auto end = str.begin() + str.size();
+    if (end == begin)
+        return "";
+
+    while (end != begin && std::isspace(*(end - 1)))
+        --end;
+
+    return std::string(begin, end);
+}
+
+
 }
 
