@@ -4,13 +4,18 @@
 #include <vector>
 #include <unordered_map>
 #include "templater.hpp"
+// serialize/deserialize basic object 
+#include "templater_object.hpp"
+// serialize/deserialize most common types
+#include "templater_spec_basic.hpp"
+
 
 namespace templater {
 
 // use this function for deserialization operations in case with new
 // serializable types or add end_element function for every deserialization
-template <typename Class, typename = void, typename = void>
-inline void deserialize(reading_visitor* visitor, Class& obj) noexcept {
+template <typename Class>
+void deserialize(reading_visitor* visitor, Class& obj) noexcept {
     deserialize_impl(visitor, obj);
 
     // end deserialization operation for element
