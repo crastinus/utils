@@ -77,7 +77,7 @@ macro(DefineForFiles ListOfAtoms)
         if ((${HaveInclude} EQUAL 1) AND (${HaveLibrary} EQUAL 1) )
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${DefineVariableName}")
             set(${DefineVariableName} 1)
-            message(STATUS "Define variable and preprocessor definissions ${DefineVariableName}")
+            message(STATUS "Define variable and preprocessor definitions ${DefineVariableName}")
         endif()
                 
     endforeach()
