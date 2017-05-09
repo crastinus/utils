@@ -30,6 +30,7 @@ struct cli_arguments {
     // initialization from command line
     cli_arguments(int argc, char const* argv[]);
     cli_arguments(cli_arguments const&) = default;
+    cli_arguments(cli_arguments&&)      = default;
     ~cli_arguments();
 
     void add(std::vector<std::string> values);
@@ -39,10 +40,15 @@ struct cli_arguments {
     std::vector<char*> argv();
     std::vector<char const*> argv() const;
 
+    int argc() const;
+
+    char const* operator[](unsigned ix);
+
     std::string to_string() const;
 
     iterator begin() const;
     iterator end() const;
+
 
   private:
     

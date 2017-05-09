@@ -71,6 +71,11 @@ std::vector<CharType> argv_impl(ArgumentsType& arguments, BufferType& buffer) {
     return result;
 }
 
+char const* cli_arguments::operator[](unsigned ix) {
+    assert(ix < args_.size());
+    return args_[ix] + buffer_.data();
+}
+
 std::vector<char*> cli_arguments::argv()  { 
     return argv_impl<char*>(args_,buffer_);
 }
@@ -79,9 +84,11 @@ std::vector<char const*> cli_arguments::argv() const {
     return argv_impl<char const*>(args_, buffer_);
 }
 
+int cli_arguments::argc() const { return args_.size(); }
+
 cli_arguments::iterator cli_arguments::begin() const { return cli_arguments::iterator(*this, 0); }
 cli_arguments::iterator cli_arguments::end() const {
-    return cli_arguments::iterator(*this, args_.size()-1);
+    return cli_arguments::iterator(*this, args_.size());
 }
 
 cli_arguments::iterator::iterator(cli_arguments const& args, unsigned idx)
