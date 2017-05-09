@@ -15,6 +15,8 @@ struct reading_visitor : public templater::reading_visitor {
      */
     template <typename BufferType>
     bool parse(BufferType const& buffer);
+    char const* parse_error() const;
+   
 
     virtual char const* read_string() noexcept override;
     virtual int         read_integer() noexcept override;

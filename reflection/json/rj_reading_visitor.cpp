@@ -1,9 +1,16 @@
 
 #include "rj_reading_visitor.hpp"
 #include "rapidjson/document.h"
+#include "rapidjson/error/en.h"
 #include "iterator_stream.hpp"
 #include <vector>
 #include <string>
+
+// this version build with other utils
+// cyclic dependencies in boost was appeared in similar way, lol
+#include <utils/string/build.hpp>
+#include <utils/iostream/ostream_range.hpp>
+
 /*
  *
  * TODO: Make it work
@@ -73,7 +80,8 @@ struct reading_visitor_impl {
     std::vector<value_t*>                values_stack_;
     std::vector<element_state> states_stack_;  // probably doesn't needed
     std::vector<char const*>   names_stack_;
-    ;
+
+    std::string                parse_error_;
 };
 
 reading_visitor_impl::reading_visitor_impl() {
@@ -112,7 +120,25 @@ bool reading_visitor_impl::parse(char const* begin, char const* end) noexcept {
     values_stack_.push_back(&document_);
     //states_stack_.push_back(ROOT_VALUE);
 
-    return document_.HasParseError();
+    auto has_error = document_.HasParseError();
+    if (has_error){
+        constexpr int range = 25;
+
+        auto offset = document_.GetErrorOffset();
+        auto left   = begin + offset - range;
+        auto right  = begin + offset + range;
+        if (left < begin) left = begin;
+        if (right > end) right = end;
+
+        auto error_code = document_.GetParseError();
+        auto error_string = rapidjson::GetParseError_En(error_code);
+
+        parse_error_ =
+            utils::build_string("Parsing error at ", offset, ". Json string in range ", range,
+                                utils::os_rng(left, right), ". RapidjsonError: ", error_string);
+    }
+
+    return !has_error;
 }
 
 //function pops resgular values
@@ -333,6 +359,10 @@ bool reading_visitor::parse(BufferType const& buffer) {
     return impl_->parse(&*buffer.begin(), &*buffer.end());
 }
 
+char const* reading_visitor::parse_error() const {
+    return impl_->parse_error_.data();
+}
+
 template bool reading_visitor::parse<std::string>(std::string const& buffer);
 template bool reading_visitor::parse<std::vector<char>>(std::vector<char> const& buffer);
 
@@ -352,6 +382,7 @@ bool reading_visitor::prepare_array() noexcept { return impl_->prepare_array(); 
 bool reading_visitor::extract_element() noexcept { return impl_->extract_element(); }
 unsigned reading_visitor::array_size() noexcept { return impl_->array_size();}
 void     reading_visitor::end_element() noexcept { impl_->end_element(); }
+
 
 void reading_visitor::end_array() noexcept {}
 void reading_visitor::end_object() noexcept {}
