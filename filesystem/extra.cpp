@@ -1,6 +1,8 @@
 #include "extra.hpp"
 #include "filesystem.hpp"
+#include <fstream>
 #include <utils/string/string.hpp>
+#include <utils/string/sha1sum.hpp>
 
 namespace utils {
 namespace fs {
@@ -26,6 +28,15 @@ namespace fs {
         } while (!splitted_file_path.empty());
 
         return "";
+    }
+
+    std::string sha1sum(std::string const& filename) {
+        SHA1 sha1;
+        if (!is_file(filename))
+            return "";
+        std::ifstream in(filename);
+        sha1.update(in);
+        return sha1.final();
     }
 }
 }

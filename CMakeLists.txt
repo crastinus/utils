@@ -64,6 +64,8 @@ set(STRING_SRC
         string/string.hpp
         string/string_streambuf.cpp
         string/string_streambuf.hpp
+        string/sha1sum.hpp
+        string/sha1sum.cpp
     )
 
 add_library(utils 
