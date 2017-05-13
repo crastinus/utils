@@ -26,6 +26,11 @@ inline void deserialize_basic(reading_visitor* visitor, int& i) noexcept {
 }
 
 template <>
+inline void deserialize_basic(reading_visitor* visitor, unsigned& i) noexcept {
+    i = visitor->read_integer();
+}
+
+template <>
 inline void deserialize_basic(reading_visitor* visitor, bool& b) noexcept {
     b = visitor->read_boolean();
 }
@@ -61,6 +66,11 @@ inline void serialize_basic(writing_visitor* visitor,char const* const& value)  
 
 template <>
 inline void serialize_basic(writing_visitor* visitor, int const& i)  noexcept{
+    visitor->write_integer(i);
+}
+
+template <>
+inline void serialize_basic(writing_visitor* visitor, unsigned const& i)  noexcept{
     visitor->write_integer(i);
 }
 

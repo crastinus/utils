@@ -16,21 +16,21 @@ template <typename Pointee>
 inline void deserialize_basic(reading_visitor* visitor,
                               std::shared_ptr<Pointee>& obj) noexcept {
     obj = std::make_shared<Pointee>();
-    serialize_basic(visitor, *obj);
+    deserialize(visitor, *obj);
 }
 
 template <typename Pointee>
 inline void deserialize_basic(reading_visitor* visitor,
                               std::unique_ptr<Pointee>& obj) noexcept {
     obj = std::make_unique<Pointee>();
-    serialize_basic(visitor, *obj);
+    deserialize(visitor, *obj);
 }
 
 template <typename pointee>
 inline void serialize_basic(writing_visitor* visitor,
                             std::shared_ptr<pointee> const& obj) noexcept {
     if (obj) {
-        serialize_basic(visitor, *obj);
+        serialize(visitor, *obj);
     } else
         visitor->write_none();
 }
@@ -39,7 +39,7 @@ template <typename pointee>
 inline void serialize_basic(writing_visitor* visitor,
                             std::unique_ptr<pointee> const& obj) noexcept {
     if (obj) {
-        serialize_basic(visitor, *obj);
+        serialize(visitor, *obj);
     } else
         visitor->write_none();
 }
