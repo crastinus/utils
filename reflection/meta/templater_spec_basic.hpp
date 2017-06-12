@@ -26,6 +26,13 @@ inline void deserialize_basic(reading_visitor* visitor, int& i) noexcept {
 }
 
 template <>
+inline void deserialize_basic(reading_visitor* visitor, long& i) noexcept {
+    // i don't know long doesn't compatible with integer
+    // TODO: int must be replaced to in64_t in visitor
+    i = visitor->read_integer();
+}
+
+template <>
 inline void deserialize_basic(reading_visitor* visitor, unsigned& i) noexcept {
     i = visitor->read_integer();
 }
@@ -71,6 +78,11 @@ inline void serialize_basic(writing_visitor* visitor, int const& i)  noexcept{
 
 template <>
 inline void serialize_basic(writing_visitor* visitor, unsigned const& i)  noexcept{
+    visitor->write_integer(i);
+}
+
+template <>
+inline void serialize_basic(writing_visitor* visitor, long const& i)  noexcept{
     visitor->write_integer(i);
 }
 
