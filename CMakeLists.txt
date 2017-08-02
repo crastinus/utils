@@ -1,6 +1,14 @@
 
+project(utils)
+cmake_minimum_required(VERSION 3.6)
+
 cmake_policy(SET CMP0052 NEW)
 include(cmake/DefineForFiles.cmake)
+include(cmake/ConfigureVS.cmake)
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+configure_msvc_runtime()
 
 list(APPEND UtilsLibraries "rapidjson|RAPIDJSON")
 list(APPEND UtilsLibraries "lua.h|LUA")
@@ -29,6 +37,7 @@ if (UNIX)
         process/platform/linux/process.cpp
     )
 endif(UNIX)
+
 
 if (RAPIDJSON)
     message(STATUS "Use Rapidjson")
@@ -67,13 +76,21 @@ set(STRING_SRC
         string/sha1sum.hpp
         string/sha1sum.cpp
     )
-
-add_library(utils 
-            iostream/datetime.hpp
+    
+set(SRC     iostream/datetime.hpp
             iostream/datetime.cpp 
             ${PROCESS_SRC}
             ${FILESYSTEM_SRC}            
             ${STRING_SRC}
             ${RAPIDJSON_GENERATOR}
-            ${LUA_CODE}
+            ${LUA_CODE})
+    
+group_files(SRC)
+
+
+add_library(utils 
+	    ${SRC}
 )
+
+
+
