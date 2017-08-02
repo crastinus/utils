@@ -87,6 +87,7 @@ set(STRING_SRC
         string/string_streambuf.hpp
         string/sha1sum.hpp
         string/sha1sum.cpp
+        string/narrow.hpp
     )
     
 set(SRC     iostream/datetime.hpp

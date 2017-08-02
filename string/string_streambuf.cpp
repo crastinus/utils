@@ -1,5 +1,6 @@
 #include "string_streambuf.hpp"
 #include <assert.h>
+#include <iterator>
 
 namespace utils {
 string_streambuf::string_streambuf(std::string& buf) : buffer_(buf) {

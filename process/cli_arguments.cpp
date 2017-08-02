@@ -2,6 +2,7 @@
 #include <utils/string/string.hpp>
 #include <assert.h>
 #include <algorithm>
+#include <iterator>
 
 namespace utils {
 

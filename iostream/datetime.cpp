@@ -10,19 +10,36 @@
 
 namespace utils {
 namespace {
-    struct tm extract_time(struct tm*(timefunction_r)(const time_t*, struct tm*)) {
+
+#ifdef __linux__
+	typedef struct tm*(timefunction_ft)(const time_t*, struct tm*);
+#define LOCALTIME localtime_r
+#define GMTIME	gmtime_r
+#elif _MSC_VER
+	typedef errno_t (timefunction_ft)( struct tm*, const time_t*);
+#define LOCALTIME localtime_s
+#define GMTIME	gmtime_s
+#else
+	static_assert(false, "Unsupported toolset");
+#endif
+
+    struct tm extract_time(timefunction_ft timefunction_r) {
         struct tm result;
         auto current = time(nullptr);
+#ifdef __linux__
         timefunction_r(&current, &result);
+#elif _MSC_VER
+		timefunction_r( &result, &current);
+#endif
         return result;
     }
 
     struct tm extract_local_time() {
-        return extract_time(localtime_r);
+        return extract_time(LOCALTIME);
     }
 
     struct tm extract_utc_time() {
-        return extract_time(gmtime_r);
+        return extract_time(GMTIME);
     }
 
     std::ostream& output_datetime(std::ostream& os, struct tm t) {

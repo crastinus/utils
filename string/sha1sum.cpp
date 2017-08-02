@@ -226,7 +226,7 @@ void SHA1::buffer_to_block(const std::string& buffer, uint32 block[BLOCK_BYTES])
 }
 
 void SHA1::read(std::istream& is, std::string& s, int max) {
-    char sbuf[max];
+    char* sbuf = (char*)alloca(max);
     is.read(sbuf, max);
     s.assign(sbuf, is.gcount());
 }

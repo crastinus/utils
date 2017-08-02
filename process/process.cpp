@@ -3,6 +3,7 @@
 #if __linux__
 #include "platform/linux/process.hpp"
 #else
+#include "platform/windows/process.hpp"
 #endif
 
 namespace utils {
