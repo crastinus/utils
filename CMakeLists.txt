@@ -38,6 +38,18 @@ if (UNIX)
     )
 endif(UNIX)
 
+if (MSVC)
+  set(FILESYSTEM_SRC ${FILESYSTEM_SRC}
+        filesystem/platform/windows/filesystem.cpp
+        filesystem/extra.cpp
+  )
+  
+  set(PROCESS_SRC ${PROCESS_SRC}
+        process/platform/windows/process.hpp
+        process/platform/windows/process.cpp
+  ) 
+endif(MSVC)
+
 
 if (RAPIDJSON)
     message(STATUS "Use Rapidjson")
