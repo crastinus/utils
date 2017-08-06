@@ -8,6 +8,11 @@ include(cmake/ConfigureVS.cmake)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+#find possible includes
+if (NOT "$ENV{LUA_PATH}" STREQUAL  "")
+  include_directories($ENV{LUA_PATH}/include)
+endif ($ENV{LUA_PATH})
+
 configure_msvc_runtime()
 
 list(APPEND UtilsLibraries "rapidjson|RAPIDJSON")
@@ -89,6 +94,13 @@ set(STRING_SRC
         string/sha1sum.cpp
         string/narrow.hpp
     )
+
+set (NUMBERS 
+      numbers/bcd.hpp
+      numbers/bcd.cpp
+      numbers/int.hpp
+      numbers/int.cpp
+      )
     
 set(SRC     iostream/datetime.hpp
             iostream/datetime.cpp 
@@ -96,7 +108,8 @@ set(SRC     iostream/datetime.hpp
             ${FILESYSTEM_SRC}            
             ${STRING_SRC}
             ${RAPIDJSON_GENERATOR}
-            ${LUA_CODE})
+            ${LUA_CODE}
+            ${NUMBERS})
     
 group_files(SRC)
 

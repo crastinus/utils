@@ -14,7 +14,7 @@ inline std::string stackdump_impl(lua_State* l, Arguments&&... args) {
     unsigned result_size = 1024;
     // compute output string size
     using swallow = int[];
-    (void)swallow{(result_size += utils::size_for_output(args), 0)...};
+	(void)swallow{(result_size += utils::size_for_output(args), 0)...};
 
     result.reserve(result_size);
 
@@ -38,7 +38,7 @@ inline std::string stackdump_impl(lua_State* l, Arguments&&... args) {
                 os << "string: '" << lua_tostring(l, i) << "'\n";
                 break;
             case LUA_TBOOLEAN: /* booleans */
-                os << "boolean: " << (bool)lua_toboolean(l, i) << "\n";
+                os << "boolean: " << (lua_toboolean(l, i) != 0) << "\n";
                 break;
             case LUA_TNUMBER: /* numbers */
                 os << "number: " << lua_tonumber(l, i) << "\n";
@@ -63,7 +63,7 @@ std::string stackdump(char const* function, lua_State* l) {
 
 
 std::string stackdump(lua_State* l)  {
-    return stackdump_impl(l);
+    return stackdump_impl(l,"");
 }
 
 
