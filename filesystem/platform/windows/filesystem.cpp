@@ -26,8 +26,16 @@ namespace fs {
     }
 
     bool exists (std::string const& path) {
-		assert(false);
-		return false; // (access(path.data(), 0) == 0);
+
+        auto file = utils::native(path);
+
+        WIN32_FIND_DATA FindFileData;
+        HANDLE handle = FindFirstFile(file.c_str(), &FindFileData);
+        bool found    = (handle != INVALID_HANDLE_VALUE);
+        if (found) {
+            FindClose(handle);
+        }
+        return found;
     }
     bool is_file(std::string const& path) { return get_mode(path) == node_mode::FILE_NODE; }
     bool is_dir(std::string const& path) { return get_mode(path) == node_mode::DIRECTORY_NODE; }
@@ -100,6 +108,10 @@ namespace fs {
 			return "";
 
         return utils::narrow(buffer);
+    }
+
+    void remove_file(std::string const& path) {
+        DeleteFile(utils::native(path).c_str());
     }
 }
 }

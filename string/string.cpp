@@ -13,15 +13,21 @@ std::vector<std::string> split(std::string const& src, char separator,
     result.reserve(src.size() / 8);
     
     bool skip_empty = ((politics & SKIP_EMPTY) != 0);
+    bool trip_left  = ((politics & TRIP_LEFT) != 0);
 
     //size_t pos = 0;
     //size_t first = 0;
     auto it = src.begin();
     auto end = src.end();
 
-    it = (*it == separator ? it+1 : it);
+    //it = (*it == separator ? it+1 : it);
 
     while (it != end){
+
+        // this one must be delete every possible empty string
+        if (trip_left)
+            while (it != end && ::isspace(*it)) ++it;
+
         auto newit = std::find(it, end, separator);
         if (skip_empty && std::distance(it,newit) == 0) {
             if (newit == end)

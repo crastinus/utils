@@ -53,6 +53,11 @@ if (MSVC)
         process/platform/windows/process.hpp
         process/platform/windows/process.cpp
   ) 
+
+  set(TIME_SRC 
+     time/time.hpp
+     time/time_win.cpp
+  )
 endif(MSVC)
 
 
@@ -101,6 +106,7 @@ set (NUMBERS
       numbers/int.hpp
       numbers/int.cpp
       )
+
     
 set(SRC     iostream/datetime.hpp
             iostream/datetime.cpp 
@@ -109,7 +115,8 @@ set(SRC     iostream/datetime.hpp
             ${STRING_SRC}
             ${RAPIDJSON_GENERATOR}
             ${LUA_CODE}
-            ${NUMBERS})
+            ${NUMBERS}
+			${TIME_SRC})
     
 group_files(SRC)
 

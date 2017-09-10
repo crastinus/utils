@@ -57,5 +57,15 @@ namespace utils {
 		return narrow(buffer);
 #endif
 	}
+
+    inline std::basic_string<TCHAR> native(std::string src) 
+    {
+#ifdef UNICODE
+        return widen(src.c_str());
+#else
+        return src;
+#endif
+
+    }
 }
 #endif

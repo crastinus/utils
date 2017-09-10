@@ -15,5 +15,8 @@ namespace fs {
     std::string canonicalize(std::string const& path);
 
     std::string current_directory();
+
+    // TODO: remove, remove_dir
+    void remove_file(std::string const& path);
 }
 }
