@@ -5,6 +5,7 @@
 //#include <sys/stat.h>
 #include <assert.h>
 #include <windows.h>
+#include <Shlobj.h>
 
 #include <utils/string/narrow.hpp>
 
@@ -112,6 +113,30 @@ namespace fs {
 
     void remove_file(std::string const& path) {
         DeleteFile(utils::native(path).c_str());
+    }
+
+    void mkdir(std::string const& path) {
+        //CreateDirectory(utils::native(path).c_str(), NULL);
+        SHCreateDirectoryEx(NULL, utils::native(path).c_str(), NULL);
+    }
+
+    void mkdir_for_file(std::string const path) {
+
+        std::string file_path = path;
+        for (auto& c : file_path)
+            if (c == '/')
+                c = '\\';
+
+        // split and remove file
+        auto splitted = utils::split(file_path, '\\');
+        splitted.pop_back();
+
+        // create directory
+        auto new_path = utils::join(splitted, "\\");
+        mkdir(new_path);
+
+        printf("Create path %s\n", new_path.c_str());
+
     }
 }
 }

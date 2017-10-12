@@ -8,6 +8,9 @@ namespace fs {
     bool is_file(std::string const& path);
     bool is_dir(std::string const& path);
 
+    void mkdir(std::string const& path);
+    void mkdir_for_file(std::string const path);
+
     std::string filename(std::string const& path);
     std::string extension(std::string const& path);
     std::string directory(std::string const& path);
@@ -18,5 +21,6 @@ namespace fs {
 
     // TODO: remove, remove_dir
     void remove_file(std::string const& path);
+
 }
 }
