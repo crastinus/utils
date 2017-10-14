@@ -4,8 +4,8 @@
 
 namespace utils {
 string_streambuf::string_streambuf(std::string& buf) : buffer_(buf) {
-    buffer_.resize(0);
-    setp(nullptr, nullptr);
+    //buffer_.resize(0);
+    //setp(nullptr, nullptr);
 }
 
 std::streamsize string_streambuf::xsputn(char const* s, std::streamsize n) {
