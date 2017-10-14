@@ -49,8 +49,8 @@ namespace fs {
     }
 
     std::string extension(std::string const& path) {
-        if (!is_file(path))
-            return "";
+        //if (!is_file(path))
+        //    return "";
         auto splited = utils::split(path, '.');
         return splited.back();
     }
