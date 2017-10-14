@@ -28,10 +28,16 @@ struct cli_arguments {
     // initialization from command
     cli_arguments(std::string const& command);
     // initialization from command line
-    cli_arguments(int argc, char const* argv[]);
+    cli_arguments(int argc, char* argv[]);
     cli_arguments(cli_arguments const&) = default;
     cli_arguments(cli_arguments&&)      = default;
     ~cli_arguments();
+
+
+    // not use any map for an arguments
+    // -f and --file for example allways will be different
+    std::string value(std::string const& argument) const;
+    bool has_key(std::string const& argument) const;
 
     void add(std::vector<std::string> values);
     // space separated string

@@ -1,5 +1,6 @@
 #include "cli_arguments.hpp"
 #include <utils/string/string.hpp>
+#include <utils/string/build.hpp>
 #include <assert.h>
 #include <algorithm>
 #include <iterator>
@@ -13,7 +14,7 @@ cli_arguments::cli_arguments(std::string const& command) {
     add(command);
 }
 
-cli_arguments::cli_arguments(int argc, char const* argv[]) {
+cli_arguments::cli_arguments(int argc, char* argv[]) {
     init(argc);
     while (*argv) {
         add_single_argument(*argv);
@@ -38,6 +39,40 @@ std::string cli_arguments::to_string() const {
     result.back() = '\0';
 
     return result;
+}
+
+std::string cli_arguments::value(std::string const& key) const {
+
+    enum { SEARCH = 1, PARSE_VALUE = 2 } state;
+
+    state = SEARCH;
+    for (auto arg : *this) {
+        switch (state) {
+        case SEARCH: {
+            if (key.compare(arg) == 0) {
+                state = PARSE_VALUE;
+            }
+        } break;
+        case PARSE_VALUE: {
+            return arg;
+        } break;
+        }
+    }
+
+    if (state == PARSE_VALUE) {
+        throw std::runtime_error(build_string("Cannot find a value for key ", key,
+                                              ". Key sited at the end of the argument sequence."));
+    }
+
+    return "";
+}
+
+bool cli_arguments::has_key(std::string const& argument) const {
+    for (auto arg : *this) {
+        if (argument.compare(arg) == 0)
+            return true;
+    }
+    return false;
 }
 
 void cli_arguments::add(std::vector<std::string> values) {
