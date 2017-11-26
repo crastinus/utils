@@ -1,7 +1,7 @@
 #include "bcd.hpp"
 #include <assert.h>
 
-bcd bcd::parse(char const* buffer, unsigned length){ return bcd{}; }
+bcd bcd::parse(char const* buffer, size_t length){ return bcd{}; }
 
 bcd bcd::parse(char const* buffer) {
 	bcd result{};

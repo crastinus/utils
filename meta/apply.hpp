@@ -18,7 +18,7 @@ inline auto makeIndexSequence<1>() {
 }
 
 template <typename F, typename Tuple, size_t... I>
-void apply_tuple_impl(F&& f, Tuple&& t, std::index_sequence<I...>) {
+inline void apply_tuple_impl(F&& f, Tuple&& t, std::index_sequence<I...>) {
 	using swallow = int[];
 	(void)swallow {
 		(f(std::get<I>(std::forward<Tuple>(t))), 0)...
@@ -26,7 +26,7 @@ void apply_tuple_impl(F&& f, Tuple&& t, std::index_sequence<I...>) {
 }
 
 template <typename F, typename Tuple>
-void apply_tuple(F&& f, Tuple&& t) {
+inline void apply_tuple(F&& f, Tuple&& t) {
     constexpr size_t tupleSize = std::tuple_size<std::decay_t<Tuple>>::value;
     apply_tuple_impl(std::forward<F>(f), std::forward<Tuple>(t), makeIndexSequence<tupleSize>());
 }

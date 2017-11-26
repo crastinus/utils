@@ -15,14 +15,14 @@ cli_arguments::cli_arguments(std::string const& command) {
 }
 
 cli_arguments::cli_arguments(int argc, char* argv[]) {
-    init(argc);
+    init(static_cast<size_t>(argc));
     while (*argv) {
         add_single_argument(*argv);
         ++argv;
     }
 }
 
-void cli_arguments::init(int size) {
+void cli_arguments::init(size_t size) {
     buffer_.reserve(initial_size);
     args_.reserve(size);
 }
@@ -101,7 +101,7 @@ std::vector<CharType> argv_impl(ArgumentsType& arguments, BufferType& buffer) {
     result.reserve(arguments.size() + 1);
 
     std::transform(arguments.begin(), arguments.end(), std::back_inserter(result),
-                   [&buffer](unsigned pos) { return buffer.data() + pos; });
+                   [&buffer](size_t pos) { return buffer.data() + pos; });
     result.push_back(nullptr);
 
     return result;
@@ -120,14 +120,14 @@ std::vector<char const*> cli_arguments::argv() const {
     return argv_impl<char const*>(args_, buffer_);
 }
 
-int cli_arguments::argc() const { return args_.size(); }
+size_t cli_arguments::argc() const { return args_.size(); }
 
 cli_arguments::iterator cli_arguments::begin() const { return cli_arguments::iterator(*this, 0); }
 cli_arguments::iterator cli_arguments::end() const {
     return cli_arguments::iterator(*this, args_.size());
 }
 
-cli_arguments::iterator::iterator(cli_arguments const& args, unsigned idx)
+cli_arguments::iterator::iterator(cli_arguments const& args, size_t idx)
     : args_(args), idx_(idx) {}
 
 // just postfix operators

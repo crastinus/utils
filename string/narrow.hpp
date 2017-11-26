@@ -30,12 +30,10 @@ namespace utils {
 #endif;
 	}
 
-    inline std::wstring widen (LPTSTR buffer) {
-#ifdef UNICODE
-        return buffer;
-#else
+    inline std::wstring widen (char const* buffer) {
+
         std::wstring result;
-        size_t length = std::char_traits<TCHAR>::length (buffer);
+        size_t length = std::char_traits<char>::length (buffer);
 
         if (length == 0) return result;
 
@@ -47,12 +45,12 @@ namespace utils {
 
         return result;
 
-#endif
+
     }
 
 	inline std::basic_string<TCHAR> native(LPTSTR buffer) {
 #ifdef UNICODE
-		return widen(buffer);
+		return buffer;
 #else
 		return narrow(buffer);
 #endif

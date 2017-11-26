@@ -8,7 +8,7 @@ struct bcd {
 	uint64_t	power_ : 7;
 	uint64_t	value_ : 56;
 
-	static bcd parse(char const* buffer, unsigned length);
+	static bcd parse(char const* buffer, size_t length);
 	static bcd parse(char const* buffer);
 	static bcd parse(std::string const& src);
 	

@@ -12,7 +12,7 @@ struct cli_arguments {
     // class created for easiest reading
     struct iterator {
 
-        iterator(cli_arguments const& args, unsigned idx = 0);
+        iterator(cli_arguments const& args, size_t idx = 0);
 
         // just postfix operators
         iterator& operator++();
@@ -22,7 +22,7 @@ struct cli_arguments {
         char const* operator*();
 
         cli_arguments const& args_;
-        unsigned    idx_;
+        size_t               idx_;
     };
 
     // initialization from command
@@ -46,7 +46,7 @@ struct cli_arguments {
     std::vector<char*> argv();
     std::vector<char const*> argv() const;
 
-    int argc() const;
+    size_t argc() const;
 
     char const* operator[](unsigned ix);
 
@@ -58,13 +58,13 @@ struct cli_arguments {
 
   private:
     
-    void init(int size);
+    void init(size_t size);
 
     void add_single_argument(char const* argument);
 
    // argv null-terminated array
     // size = argc + 1
-    std::vector<unsigned>  args_;
+    std::vector<size_t>  args_;
 
     // buffer of the arguments 
     std::vector<char>   buffer_;

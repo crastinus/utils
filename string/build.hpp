@@ -9,7 +9,7 @@ namespace utils {
 template <typename... Args>
 std::string build_string(Args&&... args) {
     std::string result;
-    unsigned    result_size = 0;
+    size_t      result_size = 0;
 
     // compute output string size
     using swallow = int[];
