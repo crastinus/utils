@@ -138,5 +138,15 @@ namespace fs {
         printf("Create path %s\n", new_path.c_str());
 
     }
+
+    bool move(std::string const& file_path_input, std::string const& new_file_path_input) {
+        auto file_path = utils::native(file_path_input);
+        auto new_file_path = utils::native(new_file_path_input);
+
+        auto result = MoveFile(file_path.c_str(), new_file_path.c_str());
+        return result != FALSE;
+    }
+
+
 }
 }
