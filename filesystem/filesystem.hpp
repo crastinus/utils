@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 namespace utils {
 namespace fs {
@@ -15,6 +16,8 @@ namespace fs {
     std::string extension(std::string const& path);
     std::string directory(std::string const& path);
     uint64_t    file_size(std::string const& path);
+
+    std::vector<std::string> files_in_directory(std::string const& path);
 
     std::string canonicalize(std::string const& path);
 

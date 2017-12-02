@@ -38,6 +38,29 @@ namespace fs {
         }
         return found;
     }
+
+    std::vector<std::string> files_in_directory(std::string const& path) {
+        
+        std::vector<std::string> result;
+
+        auto file = utils::native(path);
+
+        WIN32_FIND_DATA find_file_data;
+        HANDLE handle = FindFirstFile(file.c_str(), &find_file_data);
+        if (handle == INVALID_HANDLE_VALUE)
+            return result;
+
+        do {
+            
+            if ((find_file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
+                continue;
+
+            result.push_back(utils::narrow(find_file_data.cFileName));
+        } while (FindNextFile(handle, &find_file_data));
+        
+        return result;
+    }
+
     bool is_file(std::string const& path) { return get_mode(path) == node_mode::FILE_NODE; }
     bool is_dir(std::string const& path) { return get_mode(path) == node_mode::DIRECTORY_NODE; }
 
