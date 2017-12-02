@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef ATOMIC_QUEUE
-#include <blockingconcurrentqueue.h>
+#include "third_party/blockingconcurrentqueue.h"
 #else
 #include "block_queue_lock.hpp"
 #endif

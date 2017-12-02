@@ -1,7 +1,7 @@
 #pragma once
 
 #include "sync_op.hpp"
-#include <blockingconcurrentqueue.h>
+#include "third_party/blockingconcurrentqueue.h"
 #include <atomic>
 #include <vector>
 #include <mutex>
@@ -10,43 +10,6 @@
 #include <condition_variable>
 
 namespace concurrent {
-
-//struct block_queue {
-//
-//    void enqueue(task_t&& t) {
-//        std::unique_lock<std::mutex> lock(mutex_);
-//        tasks_q_.push(std::forward<task_t>(t));
-//        lock.unlock();
-//        cv_.notify_one();
-//    }
-//
-//    void enqueue(task_t const& t) {
-//        std::unique_lock<std::mutex> lock(mutex_);
-//        tasks_q_.push(t);
-//        lock.unlock();
-//        cv_.notify_one();
-//    }
-//
-//
-//    template <typename It>
-//    void wait_dequeue_bulk(It bi_it, unsigned count) {
-//        std::unique_lock<std::mutex> lock(mutex_);
-//        while (tasks_q_.empty())
-//            cv_.wait(lock);
-//
-//        while (!tasks_q_.empty() && count != 0) {
-//            bi_it = std::move(tasks_q_.front());
-//            tasks_q_.pop();
-//            ++bi_it;
-//            --count;
-//        }
-//    }
-//
-//   private:
-//    std::mutex                mutex_;
-//    std::queue<task_t>        tasks_q_;
-//    std::condition_variable cv_;
-//};
 
 struct sync_op_impl {
     // multiproducer multiconsumer queue
