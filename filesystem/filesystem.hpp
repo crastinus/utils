@@ -12,7 +12,7 @@ namespace fs {
     void mkdir(std::string const& path);
     void mkdir_for_file(std::string const path);
 
-    std::string filename(std::string const& path);
+    std::string filename(char const* path);
     std::string extension(std::string const& path);
     std::string directory(std::string const& path);
     uint64_t    file_size(std::string const& path);

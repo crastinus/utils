@@ -114,8 +114,12 @@ global_instance::~global_instance() {
     if (thread_.joinable())
         thread_.join();
 
-    std::vector<internal_message> buffer;
-    try_write_logs_internal(buffer, std::numeric_limits<size_t>::max()/2);
+    try {
+        std::vector<internal_message> buffer;
+        queue_.try_dequeue_bulk(std::back_inserter(buffer), std::numeric_limits<size_t>::max() / 2);
+        write_logs(buffer);
+    }
+    catch (...) {}
 }
 
 void global_instance::loop() {

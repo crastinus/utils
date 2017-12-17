@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <windows.h>
 #include <Shlobj.h>
+#include <algorithm>
 
 #include <utils/string/narrow.hpp>
 
@@ -64,9 +65,14 @@ namespace fs {
     bool is_file(std::string const& path) { return get_mode(path) == node_mode::FILE_NODE; }
     bool is_dir(std::string const& path) { return get_mode(path) == node_mode::DIRECTORY_NODE; }
 
-    std::string filename(std::string const& path) {
-        if (!is_file(path))
-            return "";
+    std::string filename(char const* raw_path) {
+        std::string path = raw_path;
+
+        for (char& c : path) {
+            if (c == '\\')
+                c = '/';
+        }
+        
         auto splited = utils::split(path, '/');
         return splited.back();
     }

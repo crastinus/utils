@@ -1,6 +1,7 @@
 #include "time.hpp"
 
 #include <windows.h>
+#include <time.h>
 
 namespace utils {
 namespace time {
@@ -23,6 +24,19 @@ static uint64_t windows_timestamp() {
 
 uint64_t timestamp_in_ms() {
     return windows_timestamp() / 10000;
+}
+
+uint64_t timestamp_in_ms_for_date(int year, int month, int day, int hour, int minute, int second, int ms) {
+    struct tm t;
+    t.tm_year = year - 1900;
+    t.tm_mon = month - 1;
+    t.tm_mday = day;
+    t.tm_hour = hour;
+    t.tm_min = minute;
+    t.tm_sec = second;
+    
+    uint64_t result_time = static_cast<uint64_t>(mktime(&t));
+    return (result_time * 1000) + ms;
 }
 
 } // namespace time
