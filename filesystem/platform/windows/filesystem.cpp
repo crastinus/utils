@@ -1,6 +1,7 @@
 
 #include <utils/filesystem/filesystem.hpp>
 #include <utils/string/string.hpp>
+#include <utils/string/build.hpp>
 //#include <unistd.h>
 //#include <sys/stat.h>
 #include <assert.h>
@@ -40,26 +41,44 @@ namespace fs {
         return found;
     }
 
-    std::vector<std::string> files_in_directory(std::string const& path) {
-        
+    namespace {
+
+    template <typename FilterFunction>
+    std::vector<std::string> elements_in_directory(std::string const& path, FilterFunction&& f) {
         std::vector<std::string> result;
 
         auto file = utils::native(path);
 
         WIN32_FIND_DATA find_file_data;
-        HANDLE handle = FindFirstFile(file.c_str(), &find_file_data);
+        HANDLE          handle = FindFirstFile(file.c_str(), &find_file_data);
+
         if (handle == INVALID_HANDLE_VALUE)
             return result;
 
         do {
-            
-            if ((find_file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
+
+            std::string file_node_name = utils::narrow(find_file_data.cFileName);
+            int         attributes     = find_file_data.dwFileAttributes;
+
+            if (!f(file_node_name, attributes))
                 continue;
 
-            result.push_back(utils::narrow(find_file_data.cFileName));
+
+            result.push_back(file_node_name);
         } while (FindNextFile(handle, &find_file_data));
-        
         return result;
+    }
+    } // namespace
+
+    std::vector<std::string> files_in_directory(std::string const& path) {
+        return elements_in_directory(path, [](std::string const&, int attr) { return (attr & FILE_ATTRIBUTE_DIRECTORY) == 0; });
+    }
+
+    std::vector<std::string> subdirectories(std::string const & path) {
+        return elements_in_directory(path, [](std::string const& folder_name, int attr) {
+            return (attr & FILE_ATTRIBUTE_DIRECTORY) != 0 && folder_name.compare(".") != 0 &&
+                   folder_name.compare("..") != 0;
+        });
     }
 
     bool is_file(std::string const& path) { return get_mode(path) == node_mode::FILE_NODE; }
@@ -146,7 +165,11 @@ namespace fs {
 
     void mkdir(std::string const& path) {
         //CreateDirectory(utils::native(path).c_str(), NULL);
-        SHCreateDirectoryEx(NULL, utils::native(path).c_str(), NULL);
+        auto native_path = utils::native(path);
+        int result = SHCreateDirectoryEx(NULL, native_path.c_str(), NULL);
+        if (result != ERROR_SUCCESS && result != ERROR_FILE_EXISTS && result != ERROR_ALREADY_EXISTS) {
+            throw std::runtime_error(build_string("Cannot create directory ", path, ". SHCreateDirectoryEx error code: ", result));
+        }
     }
 
     void mkdir_for_file(std::string const path) {

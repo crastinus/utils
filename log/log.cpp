@@ -117,7 +117,9 @@ global_instance::~global_instance() {
     try {
         std::vector<internal_message> buffer;
         queue_.try_dequeue_bulk(std::back_inserter(buffer), std::numeric_limits<size_t>::max() / 2);
-        write_logs(buffer);
+        if (!buffer.empty()) {
+            write_logs(buffer);
+        }
     }
     catch (...) {}
 }

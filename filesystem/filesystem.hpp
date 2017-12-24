@@ -18,6 +18,7 @@ namespace fs {
     uint64_t    file_size(std::string const& path);
 
     std::vector<std::string> files_in_directory(std::string const& path);
+    std::vector<std::string> subdirectories(std::string const& path);
 
     std::string canonicalize(std::string const& path);
 
