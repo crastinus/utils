@@ -16,6 +16,25 @@ namespace fs {
 
     enum class node_mode { NONE_EXISTED = 1, FILE_NODE = 2, DIRECTORY_NODE = 3 };
 
+    std::string handle_slashes(std::string const& input) {
+        std::string result;
+        result.reserve(input.size());
+
+        bool prev_slash = false;
+        for (char const& c : input) {
+            if (c == '\\' || c == '/') {
+                if (!prev_slash) {
+                    result.push_back('\\');
+                }
+                prev_slash = true;
+                continue;
+            }
+            result.push_back(c);
+            prev_slash = false;
+        }
+        return result;
+    }
+
     node_mode get_mode(std::string const& path) {
         //struct stat info;
         //if (stat(path.data(), &info))
@@ -47,13 +66,14 @@ namespace fs {
     std::vector<std::string> elements_in_directory(std::string const& path, FilterFunction&& f) {
         std::vector<std::string> result;
 
-        auto file = utils::native(path);
+        auto file = utils::native(handle_slashes(path));
 
         WIN32_FIND_DATA find_file_data;
         HANDLE          handle = FindFirstFile(file.c_str(), &find_file_data);
 
-        if (handle == INVALID_HANDLE_VALUE)
+        if (handle == INVALID_HANDLE_VALUE) {
             return result;
+        }
 
         do {
 
@@ -85,6 +105,8 @@ namespace fs {
     bool is_dir(std::string const& path) { return get_mode(path) == node_mode::DIRECTORY_NODE; }
 
     std::string filename(char const* raw_path) {
+
+        //TODO: try to remove on handle slashes
         std::string path = raw_path;
 
         for (char& c : path) {
@@ -185,6 +207,11 @@ namespace fs {
 
         // create directory
         auto new_path = utils::join(splitted, "\\");
+        
+        if (exists(new_path)) {
+            return;
+        }
+
         mkdir(new_path);
 
         printf("Create path %s\n", new_path.c_str());
