@@ -3,6 +3,7 @@
 namespace utils {
 namespace threading {
 
+// \brief working/cancelation token
 struct working_token {
 
     working_token(bool& b)
@@ -11,6 +12,11 @@ struct working_token {
     }
 
     ~working_token() { flag_ = false; }
+
+    // allways check current flag
+    explicit operator bool() const {
+        return flag_;
+    }
 
  private:
     bool& flag_;
