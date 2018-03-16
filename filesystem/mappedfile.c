@@ -60,7 +60,7 @@ char *map_file(const char *path, size_t *length)
     if (size == INVALID_FILE_SIZE || size == 0)
         goto fail;
 
-    hMap = CreateFileMappingA(hFile, NULL, PAGE_READONLY, 0, size, NULL);
+    hMap = CreateFileMappingA(hFile, NULL, PAGE_READONLY, 0, (DWORD)size, NULL);
     if (!hMap)
         goto fail;
 
