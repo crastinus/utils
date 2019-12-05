@@ -7,7 +7,7 @@
 namespace utils {
 
 template <typename... Args>
-std::string build_string(Args&&... args) {
+inline std::string build_string(Args&&... args) {
     std::string result;
     size_t      result_size = 0;
 
@@ -26,3 +26,9 @@ std::string build_string(Args&&... args) {
     return result;
 }
 }
+
+template <typename ... Args>
+inline std::string concat(Args&& ... args) {
+    return utils::build_string(std::forward<Args>(args)...);
+}
+

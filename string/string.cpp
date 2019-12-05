@@ -62,7 +62,7 @@ std::string join(std::vector<std::string> const& arr,
     for (auto str : arr)
         os << str << separator;
 
-    if (!right_side)
+    if (!right_side && result.size() > 0)
         result.resize(result.size() - separator.size());
 
     return result;
